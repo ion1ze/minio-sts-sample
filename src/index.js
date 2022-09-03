@@ -3,7 +3,7 @@ const {S3,STS} = require('aws-sdk');
 const sts = new STS({
   endpoint: 'http://localhost:9000',
   apiVersion: '2011-06-15',
-  region: 'cn-east-hefei',
+  region: 'local',
   credentials:{
     accessKeyId: 'admin',
     secretAccessKey: 'admin@123'
@@ -12,8 +12,8 @@ const sts = new STS({
 
 (function(){
   sts.assumeRole({
-    RoleArn: 'arn:xxx:xxx:xxx:xxxx',
-    RoleSessionName: 'xxx',
+    RoleArn: '',
+    RoleSessionName: '',
     Policy: JSON.stringify({
       Version: '2012-10-17',
       Statement: [
@@ -46,10 +46,11 @@ const sts = new STS({
         endpoint: 'http://localhost:9000',
         credentials: credentials,
         apiVersion: '2011-06-15',
-        region: 'cn-east-hefei'
+        region: 'local',
+        s3ForcePathStyle:true, // Minio 必须加上 ！！！
       });
 
-      s3.getObject({Bucket:'test',Key:'avatar.jpg'},(err,data)=>{
+      s3.getObject({Bucket:'test',Key:'screenshot-page-about.png'},(err,data)=>{
         if(err){
           console.log(err);
         }else {

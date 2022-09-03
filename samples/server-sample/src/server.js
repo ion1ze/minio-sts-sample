@@ -14,7 +14,11 @@ const GLOBAL_PERFIX = "/api";
 
   router.get(`${GLOBAL_PERFIX}/sts/assume-role`,async(ctx)=>{
     const {credentials} = await fileService.assumeRole();
-    ctx.body = JSON.stringify({credentials});
+    ctx.body = JSON.stringify({
+      code: 0,
+      data: {credentials},
+      message: 'success'
+    });
   });
 
   app.use(async (ctx, next) => {

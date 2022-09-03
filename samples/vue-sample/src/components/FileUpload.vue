@@ -23,7 +23,7 @@ export default {
   },
   methods: {
     async createClient() {
-      const { credentials } = await STSApi.assumeRole();
+      const { data:{credentials} } = await STSApi.assumeRole();
       const client = new S3({
         endpoint: "http://localhost:9000",
         credentials: credentials,

@@ -61,7 +61,7 @@ sts.assumeRole({
 );
 ```
 
-使用临时凭证
+使用临时凭证获取文件
 
 ```javascript
 const credentials = {

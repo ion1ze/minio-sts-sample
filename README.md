@@ -22,40 +22,37 @@
 
 ```javascript
 const sts = new STS({
-  endpoint: 'http://localhost:9000', // Minio的地址
-  apiVersion: '2011-06-15', // 固定值
-  region: 'local', // 地域名称，在web控制台中配置
-  credentials:{
-    accessKeyId: 'admin', // 访问凭证
-    secretAccessKey: 'admin@123' // 访问凭证密码
-  }
-}); 
+  endpoint: "http://localhost:9000", // Minio的地址
+  apiVersion: "2011-06-15", // 固定值
+  region: "local", // 地域名称，在web控制台中配置
+  credentials: {
+    accessKeyId: "admin", // 访问凭证
+    secretAccessKey: "admin@123", // 访问凭证密码
+  },
+});
 
-sts.assumeRole({
-    RoleArn: '', // 为空或者随便填，使用 Minio 无实际意义
-    RoleSessionName: '', // 为空或者随便填，使用 Minio 无实际意义
+sts.assumeRole(
+  {
+    RoleArn: "", // 为空或者随便填，使用 Minio 无实际意义
+    RoleSessionName: "", // 为空或者随便填，使用 Minio 无实际意义
     Policy: JSON.stringify({
-      Version: '2012-10-17', // 协议版本，固定值
+      Version: "2012-10-17", // 协议版本，固定值
       Statement: [
         {
-          Effect: 'Allow',
-          Action: [
-            's3:GetObject',
-            's3:GetBucketLocation'
-          ],
-          Resource: [
-            'arn:aws:s3:::*'
-          ]
-        }
-      ]
-    }) // web控制台可以生成查看
-  },(err,data)=>{
-    if(err){
+          Effect: "Allow",
+          Action: ["s3:GetObject", "s3:GetBucketLocation"],
+          Resource: ["arn:aws:s3:::*"],
+        },
+      ],
+    }), // web控制台可以生成查看
+  },
+  (err, data) => {
+    if (err) {
       console.error(err);
-    }else {
-      const {Credentials} = data;
+    } else {
+      const { Credentials } = data;
       console.log(Credentials);
-      // 这里获取的凭证是 JSON 类型，里面的 Key 都是大写开头，使用的时候需要转换为下面参数中小驼峰 
+      // 这里获取的凭证是 JSON 类型，里面的 Key 都是大写开头，使用的时候需要转换为下面参数中小驼峰
     }
   }
 );
@@ -65,24 +62,33 @@ sts.assumeRole({
 
 ```javascript
 const credentials = {
-  accessKeyId:Credentials.AccessKeyId,
-  secretAccessKey:Credentials.SecretAccessKey,
-  sessionToken:Credentials.SessionToken
+  accessKeyId: Credentials.AccessKeyId,
+  secretAccessKey: Credentials.SecretAccessKey,
+  sessionToken: Credentials.SessionToken,
 };
 
 const s3 = new S3({
-  endpoint: 'http://localhost:9000', // Minio的地址
+  endpoint: "http://localhost:9000", // Minio的地址
   credentials: credentials, // 临时凭证
-  apiVersion: '2011-06-15', // 固定值
-  region: 'local', // 地域名称，在web控制台中配置
-  s3ForcePathStyle:true, // 使用 Minio 必须加上，踩的坑
+  apiVersion: "2011-06-15", // 固定值
+  region: "local", // 地域名称，在web控制台中配置
+  s3ForcePathStyle: true, // 使用 Minio 必须加上，踩的坑
 });
 
-s3.getObject({Bucket:'test',Key:'screenshot-page-about.png'},(err,data)=>{
-  if(err){
-    console.log(err);
-  }else {
-    console.log(data);
+s3.getObject(
+  { Bucket: "test", Key: "screenshot-page-about.png" },
+  (err, data) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(data);
+    }
   }
-});
+);
 ```
+
+## 最佳实践
+
+[Vue 项目示例](/samples/vue-sample/)
+
+[服务端项目示例](/samples/server-sample/)

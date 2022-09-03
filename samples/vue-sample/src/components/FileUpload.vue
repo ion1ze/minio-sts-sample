@@ -1,7 +1,12 @@
 <template>
   <div class="file-upload">
-    <input type="file" @change="handleFileInputChange" />
-    <button @click="handleUpload">开始上传</button>
+    <div class="opertation">
+      <input type="file" @change="handleFileInputChange" />
+      <button @click="handleUpload">开始上传</button>
+    </div>
+    <div class="preview">
+      <img v-if="fileUrl" :src="fileUrl" alt="preview" />
+    </div>
   </div>
 </template>
 <script>
@@ -13,6 +18,7 @@ export default {
   data() {
     return {
       file: undefined,
+      fileUrl: undefined,
     };
   },
   methods: {
@@ -36,8 +42,11 @@ export default {
         return;
       }
 
+      console.log(this.file);
+
       const uuid = this.$uuid.v4();
       const fileName = this.file.name;
+      const fileType = this.file.type;
       const fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
       const key = `${uuid}.${fileExtension}`;
 
@@ -47,16 +56,30 @@ export default {
           Bucket: "test",
           Body: this.file,
           Key: key,
+          ContentType: fileType,
         },
         (err, data) => {
           if (err) {
             console.error(err);
           } else {
             console.log(data);
+            this.fileUrl = this.getFileUrl(key);
           }
         }
       );
     },
+    getFileUrl(key) {
+      return `http://localhost:9000/test/${key}`;
+    },
   },
 };
 </script>
+<style>
+.file-upload > .preview {
+  padding: 20px;
+}
+
+.file-upload > .preview > img {
+  height: 500px;
+}
+</style>

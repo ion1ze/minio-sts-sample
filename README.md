@@ -4,6 +4,12 @@
 
 在使用 `OSS` 对象存储的时候，一般的做法是后端对接 `OSS` 服务商，文件经过后端中转后上传到 `OSS`。但是这样可能会占用后端的带宽，严重的可能把后端服务拖垮。但是如果直接使用前端 `SDK` 上传，会导致上传密钥泄漏。不少公司因为成本或者安全性问题会使用自建 Minio，但是Minio这方面资料较少。那么有没有很好的办法解决这个问题呢？
 
+## Docker 安装 Minio
+
+```shell
+sudo docker run -itd --name minio -p 9000:9000 -p 9090:9090 -v /minio/data:/data -e MINIO_ROOT_USER=root -e MINIO_ROOT_PASSWORD=root@123 minio/minio server /data --console-address ":9090" --address ":9000"
+```
+
 ## STS (Security Token Server)
 
 使用 `STS` 上传文件到 `Minio` 的流程如下所示：
